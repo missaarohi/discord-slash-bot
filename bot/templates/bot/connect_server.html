@@ -1,0 +1,36 @@
+{% extends "bot/base.html" %}
+{% block title %}Connect a server{% endblock %}
+{% block content %}
+  <h1>Connect a Discord server</h1>
+  <p class="muted">
+    Add the bot to your server from the Discord Developer Portal invite link first, then paste its
+    Server (Guild) ID here (enable Developer Mode in Discord, right-click the server icon, "Copy Server ID").
+  </p>
+
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <div class="card">
+    <form method="post">
+      {% csrf_token %}
+      <label for="guild_id">Server (Guild) ID</label>
+      <input type="text" name="guild_id" id="guild_id" required>
+
+      <label for="guild_name">Server name (just for display)</label>
+      <input type="text" name="guild_name" id="guild_name">
+
+      <label for="mirror_type">Mirror notification type</label>
+      <select name="mirror_type" id="mirror_type">
+        <option value="slack">Slack Incoming Webhook</option>
+        <option value="discord">Discord Webhook (separate channel)</option>
+      </select>
+
+      <label for="mirror_webhook_url">Mirror webhook URL</label>
+      <input type="text" name="mirror_webhook_url" id="mirror_webhook_url" placeholder="https://hooks.slack.com/services/...">
+      <p class="muted">This is stored server-side only - it's never shown in logs or sent to the browser again.</p>
+
+      <div style="margin-top:18px;">
+        <button type="submit">Connect server</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

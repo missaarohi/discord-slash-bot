@@ -1,0 +1,34 @@
+{% extends "bot/base.html" %}
+{% block title %}Configure commands{% endblock %}
+{% block content %}
+  <h1>{{ server.guild_name|default:server.guild_id }}</h1>
+  <p class="muted">Command behavior below is read live by the bot - no redeploy needed to change it.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {% for config in configs %}
+      <div class="card">
+        <strong>/{{ config.command_name }}</strong>
+
+        <div class="checkbox-row">
+          <input type="checkbox" name="cfg_{{ config.id }}_enabled" id="en_{{ config.id }}" {% if config.is_enabled %}checked{% endif %}>
+          <label for="en_{{ config.id }}" style="margin:0;">Enabled</label>
+        </div>
+
+        {% if config.command_name == "report" %}
+          <label for="kw_{{ config.id }}">Flag keyword (optional)</label>
+          <input type="text" name="cfg_{{ config.id }}_keyword" id="kw_{{ config.id }}" value="{{ config.rule_keyword }}" placeholder="e.g. urgent">
+
+          <label for="tpl_{{ config.id }}">Response template ({text} = the reported text)</label>
+          <textarea name="cfg_{{ config.id }}_template" id="tpl_{{ config.id }}" rows="2">{{ config.response_template }}</textarea>
+
+          <div class="checkbox-row">
+            <input type="checkbox" name="cfg_{{ config.id }}_ai_enabled" id="ai_{{ config.id }}" {% if config.ai_enabled %}checked{% endif %}>
+            <label for="ai_{{ config.id }}" style="margin:0;">Summarize with AI (needs GROQ_API_KEY set)</label>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit">Save changes</button>
+  </form>
+{% endblock %}

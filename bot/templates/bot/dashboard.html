@@ -1,0 +1,49 @@
+{% extends "bot/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h1>Your servers</h1>
+  <p class="muted">Everything below is scoped to servers you connected - other admins never see your data.</p>
+
+  {% if not servers %}
+    <div class="card">
+      <p>No servers connected yet.</p>
+      <a class="btn" href="{% url 'connect_server' %}">Connect your first server</a>
+    </div>
+  {% else %}
+    {% for server in servers %}
+      <div class="card">
+        <strong>{{ server.guild_name|default:server.guild_id }}</strong>
+        <span class="muted">guild id: {{ server.guild_id }}</span>
+        <div class="muted">mirror: {{ server.get_mirror_type_display }}</div>
+        <div style="margin-top:10px;">
+          <a class="btn secondary" href="{% url 'command_config' server.id %}">Configure commands</a>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h1 style="margin-top:32px;">Live command log</h1>
+  <p class="muted">Most recent 200 interactions across all your servers.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>When</th><th>Command</th><th>User</th><th>Server</th><th>Action</th><th>Status</th><th>Mirrored</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.created_at|date:"M d, H:i:s" }}</td>
+          <td>/{{ log.command_name }}</td>
+          <td>{{ log.user_display_name }}</td>
+          <td>{{ log.server|default:"-" }}</td>
+          <td>{{ log.action_taken|default:"-" }}{% if log.command_name == "report" %} {% if log.resolved %}(resolved){% endif %}{% endif %}</td>
+          <td><span class="badge {{ log.status }}">{{ log.get_status_display }}</span></td>
+          <td>{% if log.mirrored %}yes{% else %}no{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="7" class="muted">No commands logged yet - try running one in Discord.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

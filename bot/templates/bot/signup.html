@@ -1,0 +1,26 @@
+{% extends "bot/base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:360px; margin: 40px auto;">
+    <h1>Create admin account</h1>
+    <p class="muted">Create a new account to access the dashboard.</p>
+    {% if form.errors %}
+      <div class="error">
+        {{ form.errors }}
+      </div>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label for="id_username">Username</label>
+      <input type="text" name="username" id="id_username" required autofocus>
+      <label for="id_password1">Password</label>
+      <input type="password" name="password1" id="id_password1" required>
+      <label for="id_password2">Confirm password</label>
+      <input type="password" name="password2" id="id_password2" required>
+      <div style="margin-top:18px; display:flex; gap:10px;">
+        <button type="submit">Create account</button>
+        <a class="btn secondary" href="{% url 'login' %}">Back to login</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
