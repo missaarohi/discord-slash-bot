@@ -151,6 +151,24 @@ Both are free, paste-a-URL, no card required.
 - A real task queue (Celery/RQ) instead of a plain background thread for the
   deferred work - fine at this scale, not what I'd ship at real volume
 
+  ## For reviewers — quick access
+
+**Live app:** https://discord-slash-bot-08q6.onrender.com
+
+**Add the bot to your own Discord server:**
+[Invite link](https://discord.com/oauth2/authorize?client_id=1523265110343286875&permissions=2147485696&integration_type=0&scope=bot+applications.commands)
+(Needs "Manage Server" permission on the server you're adding it to.)
+
+**Or use the existing test server:**
+[Test server invite](https://discord.gg/MHYTZEVvt)
+- `/status` and `/report <text>` are already registered there.
+- The mirror channel is `#mirror-notifications`.
+
+**Dashboard login (throwaway admin account):**
+- URL: https://discord-slash-bot-08q6.onrender.com/login/
+- Username: `reviewer`
+- Password: `Reviewer@123`
+
 ## Testing it
 
 1. Log in to the dashboard, connect your test server (guild ID + a Slack or
