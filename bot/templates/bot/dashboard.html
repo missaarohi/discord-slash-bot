@@ -21,7 +21,20 @@
       </div>
     {% endfor %}
   {% endif %}
+<form method="GET" style="margin:20px 0;">
+    <input
+        type="text"
+        name="command"
+        placeholder="Search command (e.g. /report)"
+        value="{{ request.GET.command }}"
+    >
 
+    <button type="submit">
+        Filter
+    </button>
+
+    <a href="{% url 'dashboard' %}">Clear</a>
+</form>
   <h1 style="margin-top:32px;">Live command log</h1>
   <p class="muted">Most recent 200 interactions across all your servers.</p>
   <table>
