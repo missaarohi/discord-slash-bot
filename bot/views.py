@@ -254,7 +254,24 @@ def signup(request):
 @login_required
 def dashboard(request):
     servers = DiscordServer.objects.filter(admin_user=request.user)
-    logs = InteractionLog.objects.filter(server__in=servers).select_related("server")[:200]
+    logs = InteractionLog.objects.filter(server__in=servers).select_related("server")
+    command = request.GET.get("command")
+
+    if command:
+        # Remove "/" if user sends "/report"
+        command = command.lstrip("/")
+        logs = logs.filter(command_name__iexact=command)
+
+    logs = logs[:200]
+
+    return render(
+        request,
+        "bot/dashboard.html",
+        {
+            "servers": servers,
+            "logs": logs,
+        },
+    )
     return render(request, "bot/dashboard.html", {"servers": servers, "logs": logs})
 
 
